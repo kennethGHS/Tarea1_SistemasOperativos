@@ -4,11 +4,6 @@
 
 #ifndef TAREA1_SISTEMASOPERATIVOS_CLIENTSOCKET_H
 #define TAREA1_SISTEMASOPERATIVOS_CLIENTSOCKET_H
-struct clientdata{
-    char * conectionIp;
-    int port;
-    char * clientip;
-}ClientData;
-int getclientip(struct clientdata *client);
-
+int execute_server_client();
+void configuresock();
 #endif //TAREA1_SISTEMASOPERATIVOS_CLIENTSOCKET_H
