@@ -11,8 +11,13 @@ struct info_container {
     png_uint_32 width;
 };
 int get_image_type(char* filename){
+
     int filenamesize= strlen(filename);
-    char fileextension[] = {filename[filenamesize-3],filename[filenamesize-2],filename[filenamesize-1],"\0" };
+    printf(" %s es el filename, con largo de %d",filename,strlen(filename));
+    char fileextension[] = {filename[filenamesize-3],filename[filenamesize-2],filename[filenamesize-1],'\0' };
+    printf("Fileextension:");
+    printf(fileextension);
+    printf("\n");
     char pngExtension[] = "PNGpng";
     char jpgExtension[] = "JPGjpgJPEGjpeg";
     if(strstr(pngExtension, fileextension)!=NULL){
@@ -21,6 +26,7 @@ int get_image_type(char* filename){
     if(strstr(jpgExtension, fileextension)!=NULL){
         return 2;
     } else{
+
         return -1;
     }
     return -1;
@@ -79,12 +85,10 @@ int processPNG(char *filename) {
     int blue = 0;
     for (i = 0; i < info->height; i++) {
         for (j = 0; j < info->width * 3; j += 3) {
-            printf("%d", rows[i][j]);
             red += rows[i][j];
             green += rows[i][j + 1];
             blue += rows[i][j + 2];
         }
-        printf("\n");
     }
     fclose(fp);
     return get_type(red / (info->height * info->width), green / (info->height * info->width),
@@ -162,8 +166,9 @@ int process_picture(char * filename){
         return processPNG(filename);
     }
     else if (get_image_type(filename) == 2){
-        processJPEG(filename);
+        return  processJPEG(filename);
     } else{
+        printf("Error");
         return -1;
     }
 }

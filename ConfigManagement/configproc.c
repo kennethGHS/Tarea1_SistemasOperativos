@@ -15,7 +15,7 @@ int check_if_valid(char *ip) {
     size_t len = 0;
     ssize_t read;
 
-    fp = fopen("/home/kenneth/config.config", "r");
+    fp = fopen("/OS/config.config", "r");
     if (fp == NULL)
         return -1;
 

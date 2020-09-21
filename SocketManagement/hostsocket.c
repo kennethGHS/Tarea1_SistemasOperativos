@@ -9,6 +9,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include "../FileManagement/dirmag.h"
+#include "../ConfigManagement/configproc.h"
+#include "../ImageProcessing/imagproc.h"
 int server_fd, new_socket;
 struct sockaddr_in address;
 int opt = 1;
@@ -59,10 +61,17 @@ int execute_socket_host() {
     inet_ntop(AF_INET, &ipAddr, str, INET_ADDRSTRLEN);
     printf("El ip es:");
     printf(str);
+    int valid = check_if_valid(str);
+    if (valid==-1){
+        close(new_socket);
+        return -1;
+    }
     printf("\n");
     //AQUI SE TERMINA LA LACTURA DE IP
      read(new_socket, buffer, 1024);
-    printf(" El filename es: %s\n", buffer);
+    char * filename = get_file_name(buffer);
+    char * filename_dir = concact_dir(filename,valid);
+    printf(" El filename es: %s\n", filename_dir);
     check_directories();
     send(new_socket, "Confirmado", sizeof("confirmado"), 0);
     //Lee el largo de la imagen
@@ -71,30 +80,35 @@ int execute_socket_host() {
 
     if (len <= 1024) {
         read(new_socket, buffer, len);
-        FILE *fp = fopen("../Lol.png", "wb");
+        FILE *fp = fopen(filename_dir, "wb");
         fwrite(buffer, len, 1, fp);
         fclose(fp);
         close(new_socket);
         return 0;
     } else {
-        FILE *fp = fopen("../Lol.png", "wb");
+        FILE *fp = fopen(filename_dir, "wb");
         while (len!=0){
-            printf("lol \n");
             read(new_socket, buffer, 1024);
             len-=1024;
             fwrite(buffer, 1024, 1, fp);
             if (len<=1024){
-                printf("Leyendo \n");
                 read(new_socket, buffer, len);
                 fwrite(buffer, len, 1, fp);
-                printf("lol \n");
-
                 printf("Se ha terminado de escribir la imagen, procediendo a clasificarla...");
+
 //CODIOGO CLASIFICACION______________________________-
 
 //TERMINA CODIGO CLASIFICACION_________________________
                 close(new_socket);
                 fclose(fp);
+                if (valid==0){
+                    return 0;
+                } else{
+                    int type = process_picture(filename_dir);
+                    move_file_directory(filename,type);
+                    free(filename_dir);
+                    free(filename);
+                }
                 return 0;
             }
         }

@@ -10,35 +10,42 @@
 #include "dirmag.h"
 void check_directories(){
     struct stat st = {0};
-    if (stat("../RED", &st) == -1) {
-        mkdir("../RED", 0700);
+    if (stat("/OS/R", &st) == -1) {
+        mkdir("/OS/R", 0700);
     }
-    if (stat("../BLUE", &st) == -1) {
-        mkdir("../BLUE", 0700);
+    if (stat("/OS/B", &st) == -1) {
+        mkdir("/OS/B", 0700);
     }
-    if (stat("../GREEN", &st) == -1) {
-        mkdir("../GREEN", 0700);
+    if (stat("/OS/G", &st) == -1) {
+        mkdir("/OS/G", 0700);
     }
-    if (stat("../INVALID", &st) == -1) {
-        mkdir("../INVALID", 0700);
+    if (stat("/OS/Not Trusted", &st) == -1) {
+        mkdir("/OS/Not Trusted", 0700);
     }
     if (stat("../TEMP", &st) == -1) {
         mkdir("../TEMP", 0700);
     }
 }
+char* concat_files(char * directory,char* filename){
+    char *result = malloc(strlen(filename) + strlen(directory) + 1); // +1 for the null-terminator
+    // in real code you would check for errors in malloc here
+    strcpy(result, directory);
+    strcat(result, filename);
+    return result;
+}
 void move_file_directory(char *filename,int color){
     check_directories();
-    char* filename_direction = strcat("../TEMP/",filename);
+    char* filename_direction = concat_files("/OS/TEMP/",filename);
     if (color==1){
-        char* filename_new_dir = strcat("../RED/",filename);
+        char* filename_new_dir = concat_files("/OS/R/",filename);
         rename(filename_direction,filename_new_dir);
     }
     if (color==2){
-        char* filename_new_dir = strcat("../BLUE/",filename);
+        char* filename_new_dir = concat_files("/OS/B/",filename);
         rename(filename_direction,filename_new_dir);
     }
     if (color ==3){
-        char* filename_new_dir = strcat("../GREEN/",filename);
+        char* filename_new_dir = concat_files("/OS/G/",filename);
         rename(filename_direction,filename_new_dir);
     }
 
@@ -66,5 +73,20 @@ char* get_file_name(char *file_directory){
         i++;
     }
     return filename;
+}
+char* concact_dir(char * filename,int directory){
+    if (directory==0){
+        char *result = malloc(strlen(filename) + strlen("/OS/Not Trusted/") + 1); // +1 for the null-terminator
+        // in real code you would check for errors in malloc here
+        strcpy(result, "/OS/Not Trusted/");
+        strcat(result, filename);
+        return result;
+    } else{
+        char *result = malloc(strlen(filename) + strlen("/OS/TEMP/") + 1); // +1 for the null-terminator
+        // in real code you would check for errors in malloc here
+        strcpy(result, "/OS/TEMP/");
+        strcat(result, filename);
+        return result;
+    }
 }
 

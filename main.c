@@ -5,40 +5,56 @@
 #include "ConfigManagement/configproc.h"
 #include <pthread.h>
 #include <ifaddrs.h>
+#include <string.h>
 #include "SocketManagement/clientsocket.h"
 #include "SocketManagement/hostsocket.h"
 #include <unistd.h>
-void * client(void * none){
-    printf("\n Iniciar socket del Cliente \n");
-    execute_server_client("../ejemplo.jpg","127.0.0.1");
 
+int check_file_existence(char *filepath) {
+    FILE *fp;
+    if ((fp = fopen(filepath, "rb")) == NULL) {
+        return -1;
+    } else {
+        fclose(fp);
+        return 1;
+    }
 }
-void * host(void * none){
-    printf("\n Iniciar socket del host \n");
-    execute_socket_host();
+
+void execute_client() {
+    char ip[40];
+    printf("Please enter an IP : \n");
+    scanf("%s", ip);
+    while (1 == 1) {
+        char path[1000];
+        printf("Please enter filepath of the png/jpg or fin to finish:\n");
+        scanf("%s", path);
+        if (strcmp("fin", path) == 0) {
+            return;
+        } else {
+            if (check_file_existence(path) != 1) {
+                printf("El archivo no existe\n");
+                continue;
+            }
+            int valid = execute_server_client(path, ip);
+            if (valid == -1) {
+                return execute_client();
+            }
+            memset(ip, 0, 40);
+            memset(path, 0, 1000);
+        }
+    }
 }
-void testServers()
-{
-    pthread_t ptid[2];
-    pthread_create(&(ptid[1]), NULL, &host, NULL);
 
-    // Creating a new thread
-    pthread_create(&(ptid[0]), NULL, &client, NULL);
-
-    // Waiting for the created thread to terminate
-    pthread_join(ptid[0], NULL);
-    pthread_join(ptid[1], NULL);
-    sleep(1);
-
+void execute_host() {
+    configuresock();
+    while (1 == 1) {
+        check_directories();
+        execute_socket_host();
+    }
 }
 
 int main() {
-    int testInteger=0;
-    configuresock();
-    while (testInteger==0){
-    execute_socket_host();
-    }
-
+    execute_host();
     return 0;
 }
 

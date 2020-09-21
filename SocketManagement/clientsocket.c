@@ -26,7 +26,7 @@ int execute_server_client( char* filename,char* ip){
     //"127.0.0.1"
     if(inet_pton(AF_INET, ip, &serv_addr.sin_addr)<=0)
     {
-        printf("\nInvalid address/ Address not supported \n");
+        printf("\n Error Cannot connect to ip\n");
         return -1;
     }
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
@@ -63,8 +63,7 @@ int execute_server_client( char* filename,char* ip){
             if (sz<=1024){
                 fread(buffer,sz,1,fp);
                 send(sock,buffer,sz,0);
-                printf("Se ha terminado de enviar la imagen\n");
-                printf(buffer);
+                printf("The file has been successfully sent\n");
                 fclose(fp);
                 close(sock);
                 return 0;
