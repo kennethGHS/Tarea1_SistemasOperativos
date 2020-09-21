@@ -57,12 +57,17 @@ int execute_server_client( char* filename,char* ip){
         return 0;
     } else{
         while (sz!=0){
+            sleep(0.001);
             fread(buffer,1024,1,fp);
             sz-=1024;
-            send(sock,buffer,1024,0);
+            sleep(0.001);
+
+            printf("Send bytes : %ld",send(sock,buffer,1024,0)
+            );
             if (sz<=1024){
                 fread(buffer,sz,1,fp);
                 send(sock,buffer,sz,0);
+
                 printf("The file has been successfully sent\n");
                 fclose(fp);
                 close(sock);

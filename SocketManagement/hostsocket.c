@@ -88,16 +88,13 @@ int execute_socket_host() {
     } else {
         FILE *fp = fopen(filename_dir, "wb");
         while (len!=0){
-            read(new_socket, buffer, 1024);
-            len-=1024;
-            fwrite(buffer, 1024, 1, fp);
-            if (len<=1024){
-                read(new_socket, buffer, len);
-                fwrite(buffer, len, 1, fp);
+            long int read_b;
+            read_b = read(new_socket, buffer, 1024);
+            len-=read_b;
+            fwrite(buffer, read_b, 1, fp);
+            if (len==0){
                 printf("Se ha terminado de escribir la imagen, procediendo a clasificarla...");
-
 //CODIOGO CLASIFICACION______________________________-
-
 //TERMINA CODIGO CLASIFICACION_________________________
                 close(new_socket);
                 fclose(fp);

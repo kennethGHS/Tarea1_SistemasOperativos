@@ -22,8 +22,8 @@ void check_directories(){
     if (stat("/OS/Not Trusted", &st) == -1) {
         mkdir("/OS/Not Trusted", 0700);
     }
-    if (stat("../TEMP", &st) == -1) {
-        mkdir("../TEMP", 0700);
+    if (stat("/OS/TEMP", &st) == -1) {
+        mkdir("/OS/TEMP", 0700);
     }
 }
 char* concat_files(char * directory,char* filename){

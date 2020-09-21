@@ -39,7 +39,6 @@ void execute_client() {
             if (valid == -1) {
                 return execute_client();
             }
-            memset(ip, 0, 40);
             memset(path, 0, 1000);
         }
     }
@@ -54,7 +53,7 @@ void execute_host() {
 }
 
 int main() {
-    execute_host();
+    execute_client();
     return 0;
 }
 
