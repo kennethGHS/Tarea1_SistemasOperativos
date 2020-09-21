@@ -35,6 +35,10 @@ void execute_client() {
                 printf("El archivo no existe\n");
                 continue;
             }
+            if(get_image_type(path)==-1){
+                printf("El archivo no es soportado\n");
+                continue;
+            }
             int valid = execute_server_client(path, ip);
             if (valid == -1) {
                 return execute_client();

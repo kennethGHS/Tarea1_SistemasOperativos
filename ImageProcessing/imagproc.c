@@ -10,14 +10,15 @@ struct info_container {
     png_uint_32 height;
     png_uint_32 width;
 };
+/**
+ * Method used to get the extension of a file and verify its either png or jpg or jpeg
+ * @param filename The direction to the file
+ * @return 1 for a png, 2 for a jpeg or jpg and -1 if neither
+ */
 int get_image_type(char* filename){
 
     int filenamesize= strlen(filename);
-    printf(" %s es el filename, con largo de %d",filename,strlen(filename));
     char fileextension[] = {filename[filenamesize-3],filename[filenamesize-2],filename[filenamesize-1],'\0' };
-    printf("Fileextension:");
-    printf(fileextension);
-    printf("\n");
     char pngExtension[] = "PNGpng";
     char jpgExtension[] = "JPGjpgJPEGjpeg";
     if(strstr(pngExtension, fileextension)!=NULL){
@@ -32,7 +33,13 @@ int get_image_type(char* filename){
     return -1;
 }
 
-
+/**
+ * Simple function to decide between one of the rgb values
+ * @param red red rgb value
+ * @param green green rgb value
+ * @param blue blue rgb value
+ * @return  1 for red,  3 for green and 2 for blue
+ */
 int get_type(int red, int green, int blue) {
     printf("Los valores de entrada son rojo: %d verde: %d Azul :%d \n",red , green ,
            blue );
@@ -49,7 +56,11 @@ int get_type(int red, int green, int blue) {
     }
     return 3;
 }
-
+/**
+ * Extracts the info of a png picture
+ * @param filename the path to the picture
+ * @return an structure containing the width and height of the png
+ */
 struct info_container *getInfoPicturePNG(char *filename) {
     FILE *fp = fopen(filename, "rb");
     png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -62,7 +73,11 @@ struct info_container *getInfoPicturePNG(char *filename) {
     fclose(fp);
     return contenedor;
 }
-
+/**
+ * Method that returns wich RGB value is most present in a png picture
+ * @param filename path to the file
+ * @return 1 for red,  3 for green and 2 for blue
+ */
 int processPNG(char *filename) {
     struct info_container *info = getInfoPicturePNG(filename);
     FILE *fp = fopen(filename, "r");
@@ -95,6 +110,11 @@ int processPNG(char *filename) {
                     blue / (info->height * info->width));
 
 }
+/**
+ * Coded based on the libjpg page example and documentation, gets the rgb value most present on the picture
+ * @param filename the path to the file
+ * @return  1 for red,  3 for green and 2 for blue
+ */
 int processJPEG(char *filename) {
     unsigned char a, r, g, b;
     int width, height;
@@ -161,6 +181,11 @@ int processJPEG(char *filename) {
     return get_type(red / (size / 4), green / (size / 4),
                     blue / (size / 4));
 }
+/**
+ * Process either png or jpg pictures and returns the mist present rgb value
+ * @param filename path to the file
+ * @return  1 for red,  3 for green and 2 for blue
+ */
 int process_picture(char * filename){
     if(get_image_type(filename) == 1){
         return processPNG(filename);

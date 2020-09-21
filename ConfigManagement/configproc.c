@@ -7,7 +7,11 @@
 #include <string.h>
 
 int contains_ip(char *line);
-
+/**
+ * Checks if the configuration file contains the IP requested and if it exists gets its status
+ * @param ip
+ * @return 0 if it is a restricted ip, -1 if it doesnt exists and 1 if it has permissions
+ */
 int check_if_valid(char *ip) {
     int valid = 0;
     FILE *fp;
@@ -46,7 +50,11 @@ int check_if_valid(char *ip) {
     }
     return -1;
 }
-
+/**
+ * Extracts the status of an IP out of the configuration file
+ * @param line
+ * @return 0 if not accepted and 1 with permissions
+ */
 char *extract_ip_valid(char *line) {
     int i = 0;
     int len = strlen(line);

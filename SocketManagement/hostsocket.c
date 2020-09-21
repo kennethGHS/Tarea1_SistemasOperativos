@@ -16,6 +16,9 @@ struct sockaddr_in address;
 int opt = 1;
 int addrlen = sizeof(address);
 char buffer[1024] = {0};
+/**
+ * Sets the default parameters of the host socket
+ */
 void configuresock(){
 
     // Creating socket file descriptor
@@ -45,6 +48,11 @@ void configuresock(){
         exit(EXIT_FAILURE);
     }
 }
+/**
+ * Executes the host socket with the default values, this method awaits to receive a picture
+ * when the picture is delivered it ends the procedure by identifing  wich rgb value is the most present
+ * @return 0 if everything went right and -1 if an error is thrown
+ */
 int execute_socket_host() {
     printf("\nInicio Host\n");
     if ((new_socket = accept(server_fd, (struct sockaddr *) &address,
@@ -94,8 +102,6 @@ int execute_socket_host() {
             fwrite(buffer, read_b, 1, fp);
             if (len==0){
                 printf("Se ha terminado de escribir la imagen, procediendo a clasificarla...");
-//CODIOGO CLASIFICACION______________________________-
-//TERMINA CODIGO CLASIFICACION_________________________
                 close(new_socket);
                 fclose(fp);
                 if (valid==0){

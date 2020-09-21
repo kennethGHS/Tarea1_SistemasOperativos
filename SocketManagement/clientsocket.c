@@ -8,7 +8,12 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
-
+/**
+ * Method that sends a picture to the host
+ * @param filename teh path to the file to send
+ * @param ip the ip of the host
+ * @return 0 if everything went right -1 otherwise
+ */
 int execute_server_client( char* filename,char* ip){
     int sock = 0, valread;
     struct sockaddr_in serv_addr;

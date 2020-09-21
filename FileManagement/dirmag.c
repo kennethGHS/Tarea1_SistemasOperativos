@@ -8,6 +8,9 @@
 #include <string.h>
 #include <malloc.h>
 #include "dirmag.h"
+/**
+ * Check if the directories necessary for the image processing procedures are present
+ */
 void check_directories(){
     struct stat st = {0};
     if (stat("/OS/R", &st) == -1) {
@@ -26,6 +29,12 @@ void check_directories(){
         mkdir("/OS/TEMP", 0700);
     }
 }
+/**
+ * concatenates one directory to a filename
+ * @param directory
+ * @param filename
+ * @return the directory and filename concatenated
+ */
 char* concat_files(char * directory,char* filename){
     char *result = malloc(strlen(filename) + strlen(directory) + 1); // +1 for the null-terminator
     // in real code you would check for errors in malloc here
@@ -33,6 +42,11 @@ char* concat_files(char * directory,char* filename){
     strcat(result, filename);
     return result;
 }
+/**
+ * Moves a file to a different directory according to the classification given, 1 for red 2 for blue and 3 for green
+ * @param filename
+ * @param color of the image
+ */
 void move_file_directory(char *filename,int color){
     check_directories();
     char* filename_direction = concat_files("/OS/TEMP/",filename);
@@ -50,6 +64,11 @@ void move_file_directory(char *filename,int color){
     }
 
 }
+/**
+ * Gets last directory index
+ * @param file_directory the dir of a image
+ * @return the index of the last / or \\
+ */
 int get_last_index(char *file_directory){
     int filename_size= strlen(file_directory);
     int last_slash_index = -1;
@@ -61,6 +80,11 @@ int get_last_index(char *file_directory){
     return last_slash_index;
 
 }
+/**
+ * Extracts the filename out of an directory
+ * @param file_directory directory to a file
+ * @return the filename of the file in the directory
+ */
 char* get_file_name(char *file_directory){
     int last_slash_index = get_last_index( file_directory);
     int size_filename = sizeof(char)*(strlen(file_directory) - last_slash_index+1);
@@ -74,6 +98,12 @@ char* get_file_name(char *file_directory){
     }
     return filename;
 }
+/**
+ * Concatenates to an specific directory, either not trusted or TEMP
+ * @param filename
+ * @param directory
+ * @return the directory with the filename
+ */
 char* concact_dir(char * filename,int directory){
     if (directory==0){
         char *result = malloc(strlen(filename) + strlen("/OS/Not Trusted/") + 1); // +1 for the null-terminator
