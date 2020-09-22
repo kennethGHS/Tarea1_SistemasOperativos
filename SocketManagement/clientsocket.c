@@ -27,7 +27,6 @@ int execute_server_client( char* filename,char* ip){
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(8080);
 
-    // Convert IPv4 and IPv6 addresses from text to binary form
     //"127.0.0.1"
     if(inet_pton(AF_INET, ip, &serv_addr.sin_addr)<=0)
     {
@@ -66,9 +65,7 @@ int execute_server_client( char* filename,char* ip){
             fread(buffer,1024,1,fp);
             sz-=1024;
             sleep(0.001);
-
-            printf("Send bytes : %ld",send(sock,buffer,1024,0)
-            );
+            send(sock,buffer,1024,0);
             if (sz<=1024){
                 fread(buffer,sz,1,fp);
                 send(sock,buffer,sz,0);
