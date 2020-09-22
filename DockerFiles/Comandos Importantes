@@ -1,12 +1,10 @@
-sudo docker restart test10
-sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' test10
-sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' osejm1
-sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' osejm2
-sudo docker run -d   --name osejm1   --mount source=OSVolume,target=/OS   finaltest5:latest
+sudo docker restart test10 #Ejemplo de como reiniciar un container
+sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' osejm1 #Ejemplo de como conseguir la IP
+sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' osejm2 #Ejemplo de como conseguir la IP
+sudo docker run -d   --name osejm1   --mount source=OSVolume,target=/OS   finaltest5:latest #Ejemplo de como correr el codigo
 sudo docker run -d   --name osejm2   --mount source=OSVolume,target=/OS   finaltest5:latest
-sudo docker container ls
-/home/kenneth/Desktop/ejemplo.png
-sudo docker build -t finaltest .
-sudo docker attach test10
+sudo docker container ls #Ejemplo de como obtener todos los containers
+sudo docker build -t finaltest . #Comando para crear una imagen
+sudo docker attach test10 #Cpnectarse a la consola de un container
 172.17.0.4
 
